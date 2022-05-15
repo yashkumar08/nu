@@ -2,6 +2,7 @@
 pragma solidity >=0.4.22 <0.8.0;
 contract College{
     uint public totalUsers=0;
+    address public admin;
     mapping(address=>string) public roles;
     struct UserInfo{
         string name;
@@ -11,6 +12,9 @@ contract College{
     }
     mapping(uint=>UserInfo) public users;
     mapping(address=>UserInfo) public getUserInfo;
+    constructor() public {
+        admin=msg.sender;
+    }
     function addUser(string memory _n,string memory _e,string memory _p,string memory _r) public {
         totalUsers++;
         roles[msg.sender]=_r;

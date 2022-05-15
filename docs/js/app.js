@@ -64,8 +64,26 @@ App = {
 
   render: async () => {
     var role=await App.college.roles(App.account);
+    var admin=await App.college.admin();
+    if(admin.tostring().touppercase()==App.account.tostring().touppercase()){
+      var totaluses=await App.college.totaluses();
+      var count=parseInt(totalusers);
+      $("displayusers").empty;
+      for(var i=1;i<=count;i++){
+        var user=await App.college.user(parseInt(i));
+        var str="<tr><td>"+user[0]+"/<td><td>"+user[1]+"/<td><td>"+user[2]+"/<td><td>"+user[3]+"/<td><tr>";
+        $("displayusers").append(str)
+      }
 
-   if(role=="1"){
+      $("#studentdashboard").hide();
+      $("#signupPage").hide();
+      $("#teacherdashboard").hide(); 
+      $("#officedashboard").hide(); 
+      $("admindashboard").show();
+
+    }
+
+   else if(role=="1"){
      //this is student
     userinfo=await App.college.getUserInfo(App.account);
     $("#dispSname").html(userinfo[0])
@@ -74,7 +92,8 @@ App = {
      $("#studentdashboard").show();
      $("#signupPage").hide();
      $("#teacherdashboard").hide(); 
-     $("#officedashboard").hide();  
+     $("#officedashboard").hide(); 
+     $("admindashboard").hide() 
    }
    else if(role=="2"){
     userinfo=await App.college.getUserInfo(App.account);
@@ -85,6 +104,7 @@ App = {
     $("#signupPage").hide();
     $("#teacherdashboard").show(); 
     $("#officedashboard").hide();
+    $("admindashboard").hide(); 
    }
    else if(role=="3"){
     userinfo=await App.college.getUserInfo(App.account);
@@ -95,6 +115,7 @@ App = {
     $("#signupPage").hide();
     $("#teacherdashboard").hide(); 
     $("#officedashboard").show();
+    $("admindashboard").hide(); 
    }
    else{
      //new user 
@@ -102,6 +123,7 @@ App = {
      $("#signupPage").show();
      $("#teacherdashboard").hide(); 
      $("#officedashboard").hide();
+     $("admindashboard").hide(); 
    }
 
   } ,
@@ -111,6 +133,7 @@ App = {
     var uemail=$("#uemail").val();
     var uphno=$("#uphno").val();
     await App.college.addUser(uname,uemail,uphno,role,{from:App.account});
+    await App.render();
   }
 
 
